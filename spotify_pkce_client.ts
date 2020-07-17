@@ -232,7 +232,7 @@ class AccessToken {
     /**
      * [PKCE Authorization Step 5. Use the access token to access the Spotify Web API][1]
      *
-     * [1]: 5-use-the-access-token-to-access-the-spotify-web-api
+     * [1]: https://developer.spotify.com/documentation/general/guides/authorization-guide/#5-use-the-access-token-to-access-the-spotify-web-api
      */
     const response = await fetch(new URL(url, `https://api.spotify.com/v1/`), {
       ...init,
