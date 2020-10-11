@@ -9,7 +9,7 @@ Access the Spotify API from a Deno CLI app. Uses the [Authorization Code Flow wi
 A test application is provided:
 
 ```shell
-> deno run --allow-net https://raw.githubusercontent.com/kitibyte/deno-spotify/main/spotify_pkce_client_test.ts
+> deno run --allow-net https://raw.githubusercontent.com/DavidJones418/deno-spotify/main/spotify_pkce_client_test.ts
 Continue authentication at http://localhost:49918
 Access token is valid
 Current user: {
