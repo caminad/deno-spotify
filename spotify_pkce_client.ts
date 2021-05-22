@@ -1,7 +1,7 @@
 // Copyright 2020 David Jones. MIT license.
-import * as base64url from "https://deno.land/std@0.60.0/encoding/base64url.ts";
-import { createHash } from "https://deno.land/std@0.60.0/hash/mod.ts";
-import { serve } from "https://deno.land/std@0.60.0/http/server.ts";
+import * as base64url from "https://deno.land/std@0.97.0/encoding/base64url.ts";
+import { createHash } from "https://deno.land/std@0.97.0/hash/mod.ts";
+import { serve } from "https://deno.land/std@0.97.0/http/server.ts";
 
 /**
  * Proof Key for Code Exchange (PKCE) client for the Spotify API.
@@ -24,7 +24,7 @@ export default class SpotifyPKCEClient {
    * [1]: https://www.iana.org/assignments/service-names-port-numbers/service-names-port-numbers.xhtml
    * [2]: https://developer.spotify.com/dashboard/applications/
    */
-  constructor(params: { id: string; callback: URL | string }) {
+  constructor(params: { id: string; callback: string }) {
     this.id = params.id;
     this.#callback = new URL(params.callback);
   }
@@ -43,7 +43,7 @@ export default class SpotifyPKCEClient {
      * [1]: https://developer.spotify.com/documentation/general/guides/authorization-guide/#1-create-the-code-verifier-and-challenge
      */
     const codeVerifier = base64url.encode(
-      crypto.getRandomValues(new Uint8Array(32))
+      crypto.getRandomValues(new Uint8Array(32)),
     );
 
     /**
@@ -60,11 +60,11 @@ export default class SpotifyPKCEClient {
         redirect_uri: this.#callback.href,
         code_challenge_method: `S256`,
         code_challenge: base64url.encode(
-          createHash("sha256").update(codeVerifier).digest()
+          new Uint8Array(createHash("sha256").update(codeVerifier).digest()),
         ),
         state: base64url.encode(crypto.getRandomValues(new Uint8Array(32))),
         ...(scopes && { scope: scopes.join(` `) }),
-      })}`
+      })}`,
     );
 
     /**
@@ -159,15 +159,15 @@ export default class SpotifyPKCEClient {
  */
 interface AccessTokenResponse {
   /** An access token that can be provided in subsequent calls to Spotify’s Web API. */
-  readonly access_token: string;
+  readonly "access_token": string;
   /** How the access token may be used: always “Bearer”. */
-  readonly token_type: "Bearer";
+  readonly "token_type": "Bearer";
   /** A space-separated list of scopes which have been granted for this `access_token` */
-  readonly scope: string;
+  readonly "scope": string;
   /** The time period (in seconds) for which the access token is valid. */
-  readonly expires_in: number;
+  readonly "expires_in": number;
   /** A token that can be sent to the Spotify Accounts service in place of an authorization code. */
-  readonly refresh_token: string;
+  readonly "refresh_token": string;
 }
 
 /**
@@ -180,7 +180,7 @@ class AccessToken {
   static async create(
     client: SpotifyPKCEClient,
     grantType: string,
-    params: Record<string, string>
+    params: Record<string, string>,
   ) {
     const response = await fetch(`https://accounts.spotify.com/api/token`, {
       method: "POST",
@@ -209,7 +209,7 @@ class AccessToken {
 
   private constructor(
     client: SpotifyPKCEClient,
-    response: AccessTokenResponse
+    response: AccessTokenResponse,
   ) {
     this.#client = client;
     this.#value = response.access_token;
@@ -228,7 +228,7 @@ class AccessToken {
    *
    * @param url Resolved relative to `https://api.spotify.com/v1/`.
    */
-  async fetch(url: URL | string, init?: RequestInit) {
+  async fetch(url: string, init?: RequestInit) {
     /**
      * [PKCE Authorization Step 5. Use the access token to access the Spotify Web API][1]
      *

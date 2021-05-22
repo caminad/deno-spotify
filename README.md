@@ -1,8 +1,12 @@
 # Deno Spotify
 
-Access the Spotify API from a Deno CLI app. Uses the [Authorization Code Flow with Proof Key for Code Exchange (PKCE)][1]:
+Access the Spotify API from a Deno CLI app. Uses the
+[Authorization Code Flow with Proof Key for Code Exchange (PKCE)][1]:
 
-> The authorization code flow with PKCE is the best option for mobile and desktop applications where it is unsafe to store your client secret. It provides your app with an access token that can be refreshed. For further information about this flow, see [IETF RFC-7636][2].
+> The authorization code flow with PKCE is the best option for mobile and
+> desktop applications where it is unsafe to store your client secret. It
+> provides your app with an access token that can be refreshed. For further
+> information about this flow, see [IETF RFC-7636][2].
 
 ## Usage
 

@@ -21,7 +21,7 @@ const refreshedToken = await accessToken.refresh();
 
 console.log(
   `Current user with refreshed token:`,
-  await refreshedToken.fetch(`me`)
+  await refreshedToken.fetch(`me`),
 );
 
 const scopedToken = await client.requestAccessToken([
